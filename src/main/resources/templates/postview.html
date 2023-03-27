@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Post view by ID</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+</head>
+<body>
+<div class="container">
+    <div class="header clearfix">
+        <h3 class="text-muted">Post view by ID</h3>
+        <div th:object="${post}">
+            Post ID:
+            <th:block th:text="*{id}"></th:block>
+            <br>
+            Title:
+            <th:block th:text="*{title}"></th:block>
+            <br>
+            Body:
+            <th:block th:text="*{body}"></th:block>
+            <br>
+            User ID:
+            <th:block th:text="*{userId}"></th:block>
+            <br>
+        </div>
+    </div>
+</div>
+</body>
+</html>
