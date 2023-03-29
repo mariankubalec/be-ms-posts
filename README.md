@@ -83,6 +83,15 @@ Body:
 }
 ```
 
+#### Bad case: Other External API error
+
+```
+RESPONSE: HTTP 503
+Body:
+{
+    "error": "External API Error"
+}
+```
 [Back to Table of Content](#table-of-content)
 
 ### List post by Id
@@ -120,6 +129,16 @@ Body:
     "error": "Post Not Found"
 }
 ```
+
+#### Bad case: Other External API error
+
+```
+RESPONSE: HTTP 503
+Body:
+{
+    "error": "External API Error"
+}
+```
 [Back to Table of Content](#table-of-content)
 
 ### List posts by userId
@@ -154,6 +173,17 @@ Body:
     ... 
 ]
 ```
+
+#### Bad case: Other External API error
+
+```
+RESPONSE: HTTP 503
+Body:
+{
+    "error": "External API Error"
+}
+```
+
 [Back to Table of Content](#table-of-content)
 
 ### Update post by Id
@@ -204,6 +234,16 @@ Body:
 }
 ```
 
+#### Bad case: Other External API error
+
+```
+RESPONSE: HTTP 503
+Body:
+{
+    "error": "External API Error"
+}
+```
+
 [Back to Table of Content](#table-of-content)
 
 
@@ -223,6 +263,17 @@ Content-type: aplication/json
 
 RESPONSE: HTTP 200
 ```
+
+#### Bad case: Other External API error
+
+```
+RESPONSE: HTTP 503
+Body:
+{
+    "error": "External API Error"
+}
+```
+
 
 [Back to Table of Content](#table-of-content)
 
