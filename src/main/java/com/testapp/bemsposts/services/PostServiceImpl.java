@@ -1,111 +1,73 @@
 package com.testapp.bemsposts.services;
 
-import com.testapp.bemsposts.exceptions.ExternalAPIErrorException;
-import com.testapp.bemsposts.exceptions.PostNotFoundException;
-import com.testapp.bemsposts.exceptions.UserNotFoundException;
 import com.testapp.bemsposts.models.Post;
 import com.testapp.bemsposts.models.PostDTO;
 import com.testapp.bemsposts.models.PostUpdateDTO;
-import com.testapp.bemsposts.models.UserDTO;
 import com.testapp.bemsposts.repositories.PostRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
+// ==========================
+// *** Main Post Services ***
+// ==========================
 @Service
 public class PostServiceImpl implements PostService {
   private final PostRepository postRepository;
-  private final WebClient webClient;
+  private final ExternalAPIService externalAPIService;
 
   @Autowired
-  public PostServiceImpl(PostRepository postRepository, WebClient webClient) {
+  public PostServiceImpl(
+      PostRepository postRepository,
+      ExternalAPIService externalAPIService
+  ) {
     this.postRepository = postRepository;
-    this.webClient = webClient;
+    this.externalAPIService = externalAPIService;
   }
 
+  // -----------------------------
   // *** Services for new Post ***
+  // -----------------------------
   @Override
   public Post addPost(PostDTO inputPost) {
-    validateUserId(inputPost.getUserId());
-    Post post = savePostToExternal(inputPost);
+    externalAPIService.validateUserId(inputPost.getUserId());
+    Post post = externalAPIService.savePost(inputPost);
     savePost(post);
     return post;
-  }
-
-  private void validateUserId(Integer userId) {
-    webClient.get()
-        .uri(uriBuilder -> uriBuilder.pathSegment("users", userId.toString()).build())
-        .retrieve()
-        .onStatus(HttpStatusCode::is4xxClientError,
-            response -> Mono.error(new UserNotFoundException("Wrong User ID")))
-        .bodyToMono(UserDTO.class)
-        .onErrorResume(response -> Mono.error(new UserNotFoundException("External API Error")))
-        .block();
   }
 
   private void savePost(Post post) {
     postRepository.save(post);
   }
 
-  private Post savePostToExternal(PostDTO inputPost) {
-    return webClient.post()
-        .uri(uriBuilder -> uriBuilder.pathSegment("posts").build())
-        .bodyValue(inputPost)
-        .retrieve()
-        .bodyToMono(Post.class)
-        .onErrorResume(response -> Mono.error(new ExternalAPIErrorException("External API Error")))
-        .block();
-  }
 
+  // ------------------------------------
   // *** Services for find Post by Id ***
+  // ------------------------------------
   @Override
   public Post findById(Integer id) {
     Optional<Post> myPost = postRepository.findById(id);
     if (myPost.isPresent()) {
       return myPost.get();
     } else {
-      Post externalPost = findExternalPostById(id);
+      Post externalPost = externalAPIService.findPostById(id);
       savePost(externalPost);
       return externalPost;
     }
   }
 
-  private Post findExternalPostById(Integer id) {
-    return webClient.get()
-        .uri(uriBuilder -> uriBuilder.pathSegment("posts", id.toString()).build())
-        .retrieve()
-        .onStatus(HttpStatusCode::is4xxClientError,
-            response -> Mono.error(new PostNotFoundException("Post Not Found")))
-        .bodyToMono(Post.class)
-        .onErrorResume(response -> Mono.error(new ExternalAPIErrorException("External API Error")))
-        .block();
-  }
-
+  // ------------------------------------------
   // *** Services for find Posts by User Id ***
+  // ------------------------------------------
+
   @Override
   public List<Post> findPostsByUserId(Integer userId) {
     List<Post> internalPosts = postRepository.findAllByUserId(userId);
-    List<Post> externalPosts = findExternalPostsByUserId(userId);
+    List<Post> externalPosts = externalAPIService.findPostsByUserId(userId);
     return mergePosts(internalPosts, externalPosts);
   }
-
-  private List<Post> findExternalPostsByUserId(Integer userId) {
-    return webClient.get()
-        .uri(uriBuilder -> uriBuilder
-            .pathSegment("posts").queryParam("userId", userId).build())
-        .retrieve()
-        .bodyToMono(new ParameterizedTypeReference<List<Post>>() {
-        })
-        .onErrorResume(response -> Mono.error(new ExternalAPIErrorException("External API Error")))
-        .block();
-  }
-
   private List<Post> mergePosts(List<Post> internalPosts, List<Post> externalPosts) {
     List<Integer> internalPostIds = new ArrayList<>();
     for (Post element : internalPosts) {
@@ -119,50 +81,24 @@ public class PostServiceImpl implements PostService {
     return internalPosts;
   }
 
+  // --------------------------------
   // *** Services for Post Update ***
+  // --------------------------------
   @Override
   public Post updatePostById(Integer id, PostUpdateDTO inputPost) {
-    Post post = updateExternalPostById(id, inputPost);
+    Post post = externalAPIService.updatePostById(id, inputPost);
     if (post != null) {
       savePost(post);
     }
     return post;
   }
 
-  private Post updateExternalPostById(Integer id, PostUpdateDTO inputPost) {
-    Post post = findExternalPostById(id);
-    if (inputPost.getTitle() != null) {
-      post.setTitle(inputPost.getTitle());
-    }
-    if (inputPost.getBody() != null) {
-      post.setBody(inputPost.getBody());
-    }
-    return webClient.put()
-        .uri(uriBuilder -> uriBuilder.pathSegment("posts", id.toString()).build())
-        .bodyValue(post)
-        .retrieve()
-        .onStatus(HttpStatusCode::is4xxClientError,
-            response -> Mono.error(new PostNotFoundException("Post Not Found")))
-        .bodyToMono(Post.class)
-        .onErrorResume(response -> Mono.error(new ExternalAPIErrorException("External API Error")))
-        .block();
-  }
-
+  // --------------------------------
   // *** Services for Post Delete ***
+  // --------------------------------
   @Override
   public void deletePostById(Integer id) {
-    deleteExternalPostById(id);
+    externalAPIService.deletePostById(id);
     postRepository.deleteById(id);
-  }
-
-  private void deleteExternalPostById(Integer id) {
-    webClient.delete()
-        .uri(uriBuilder -> uriBuilder.pathSegment("posts", id.toString()).build())
-        .retrieve()
-        .onStatus(HttpStatusCode::is4xxClientError,
-            response -> Mono.error(new PostNotFoundException("Post Not Found")))
-        .bodyToMono(Post.class)
-        .onErrorResume(response -> Mono.error(new ExternalAPIErrorException("External API Error")))
-        .block();
   }
 }
