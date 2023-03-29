@@ -1,8 +1,8 @@
 package com.testapp.bemsposts.services;
 
 import com.testapp.bemsposts.models.Post;
-import com.testapp.bemsposts.models.PostDTO;
-import com.testapp.bemsposts.models.PostUpdateDTO;
+import com.testapp.bemsposts.models.dtos.PostDTO;
+import com.testapp.bemsposts.models.dtos.PostUpdateDTO;
 import java.util.List;
 
 public interface ExternalAPIService {

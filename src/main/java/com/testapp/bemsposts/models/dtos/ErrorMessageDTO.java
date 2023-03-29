@@ -1,4 +1,4 @@
-package com.testapp.bemsposts.models;
+package com.testapp.bemsposts.models.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.testapp.bemsposts.models;
+package com.testapp.bemsposts.models.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostUpdateDTO {
-  private String title;
-  private String body;
+
+public class UserDTO {
+  private Integer id;
 }

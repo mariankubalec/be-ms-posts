@@ -24,6 +24,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.postgresql:postgresql")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
+//	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework:spring-webflux")
 	compileOnly("org.projectlombok:lombok")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
