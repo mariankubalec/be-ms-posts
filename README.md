@@ -25,7 +25,7 @@ The MS solves basic CRUD operations.
   * [List posts by userId](#list-posts-by-userid)
   * [Update post by Id](#update-post-by-id)
   * [Delete post by Id](#delete-post-by-id)
-* [Documentation](documentation)
+* [Documentation](#documentation)
 * [Docker](#docker) 
 
 ## Settings
