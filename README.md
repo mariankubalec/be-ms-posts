@@ -40,10 +40,6 @@ Whole url including DB name, for example: ``jdbc:postgresql://localhost:5432/be-
 
 - #### External RESTful API URL: ``APIURL``
 
-### Configurations
-
-- #### MS listen on port: `8080`
-
 ## Features
 
 ### Add post
@@ -57,7 +53,7 @@ The MS:
 
 ```
 REQUEST:
-POST /posts
+POST /posts/
 Accept: aplication/json
 Content-type: aplication/json
 
@@ -110,7 +106,7 @@ The MS:
 
 ```
 REQUEST:
-GET /posts/{id}
+GET /posts/[id]
 Accept: aplication/json
 Content-type: aplication/json
 
@@ -155,7 +151,7 @@ The MS:
 
 ```
 REQUEST:
-GET /posts?userId={userId}
+GET /posts?userId=[userId]
 Accept: aplication/json
 Content-type: aplication/json
 
@@ -200,7 +196,7 @@ The MS:
 
 ```
 REQUEST:
-PUT /posts/{id}
+PUT /posts/[id]
 Accept: aplication/json
 Content-type: aplication/json
 
@@ -261,7 +257,7 @@ The MS:
 
 ```
 REQUEST:
-DELETE /posts/{id}
+DELETE /posts/[id]
 Accept: aplication/json
 Content-type: aplication/json
 
@@ -286,7 +282,5 @@ Body:
 Step 1 - to build docker image run ``$ docker build ./ -t springbootapp``
 
 Step 2 - to run app and db: ``$ docker-compose up``.
-
-MS listen on port 8080
 
 [Back to Table of Content](#table-of-content)

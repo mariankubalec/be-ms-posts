@@ -1,1 +1,1 @@
-rootProject.name = "betasks"
+rootProject.name = "be-ms-posts"
