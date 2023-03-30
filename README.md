@@ -53,7 +53,7 @@ The MS:
 
 ```
 REQUEST:
-POST /posts/
+POST /posts
 Accept: aplication/json
 Content-type: aplication/json
 
