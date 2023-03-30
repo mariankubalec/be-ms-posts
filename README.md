@@ -40,6 +40,10 @@ Whole url including DB name, for example: ``jdbc:postgresql://localhost:5432/be-
 
 - #### External RESTful API URL: ``APIURL``
 
+### Configurations
+
+- #### MS listen on port: `8080`
+
 ## Features
 
 ### Add post
@@ -282,5 +286,7 @@ Body:
 Step 1 - to build docker image run ``$ docker build ./ -t springbootapp``
 
 Step 2 - to run app and db: ``$ docker-compose up``.
+
+MS listen on port 8080
 
 [Back to Table of Content](#table-of-content)
