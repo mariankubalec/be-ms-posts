@@ -106,7 +106,7 @@ The MS:
 
 ```
 REQUEST:
-GET /posts/[id]
+GET /posts/{id}
 Accept: aplication/json
 Content-type: aplication/json
 
@@ -151,7 +151,7 @@ The MS:
 
 ```
 REQUEST:
-GET /posts?userId=[userId]
+GET /posts?userId={userId}
 Accept: aplication/json
 Content-type: aplication/json
 
@@ -196,7 +196,7 @@ The MS:
 
 ```
 REQUEST:
-PUT /posts/[id]
+PUT /posts/{id}
 Accept: aplication/json
 Content-type: aplication/json
 
@@ -257,7 +257,7 @@ The MS:
 
 ```
 REQUEST:
-DELETE /posts/[id]
+DELETE /posts/{id}
 Accept: aplication/json
 Content-type: aplication/json
 
