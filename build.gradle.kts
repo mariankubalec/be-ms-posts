@@ -4,7 +4,7 @@ plugins {
 	id("io.spring.dependency-management") version "1.1.0"
 }
 
-group = "com.org"
+group = "com.testapp"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
@@ -29,6 +29,14 @@ dependencies {
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	annotationProcessor("org.projectlombok:lombok")
 }
+
+tasks.register<Copy>("copyJar") {
+	println("Copying Built Jar")
+	from("$buildDir/libs/be-ms-posts-0.0.1-SNAPSHOT.jar")
+	into("build-libs")
+}
+
+tasks.named("build") { finalizedBy("copyJar") }
 
 //tasks.withType<Test> {
 //	useJUnitPlatform()

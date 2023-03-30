@@ -18,6 +18,7 @@ The MS solves basic CRUD operations.
 ## Table of Content
 * [Settings](#settings)
   * [Environment variables](#environment-variables)
+  * [Configurations](#configurations)
 * [Features](#features)
   * [Add post](#add-post)
   * [List post by Id](#list-post-by-id)
@@ -31,6 +32,10 @@ The MS solves basic CRUD operations.
 ### Environment variables
 
 - #### DB URL: ``SPRING_DATASOURCE_URL``
+
+### Configurations
+
+- #### MS runs on port: ``8080``
 
 Whole url including DB name, for example: ``jdbc:postgresql://localhost:5432/be-ms-tasks``
 
@@ -53,7 +58,7 @@ The MS:
 
 ```
 REQUEST:
-POST /posts/
+POST /posts
 Accept: aplication/json
 Content-type: aplication/json
 
@@ -105,8 +110,7 @@ The MS:
 #### Good case:
 
 ```
-REQUEST:
-GET /posts/[id]
+REQUEST:}GET /posts/{id]
 Accept: aplication/json
 Content-type: aplication/json
 
@@ -151,7 +155,7 @@ The MS:
 
 ```
 REQUEST:
-GET /posts?userId=[userId]
+GET /posts?userId={userId}
 Accept: aplication/json
 Content-type: aplication/json
 
@@ -159,16 +163,16 @@ RESPONSE: HTTP 200
 Body:
 [
     {
-        "id": 2,
-        "userId": 1,
-        "title": "qui est esse",
-        "body": "est rerum tempore vitae\nsequi sint nihil reprehenderit dolor beatae ea dolores neque\nfugiat blanditiis voluptate porro vel nihil molestiae ut reiciendis\nqui aperiam non debitis possimus qui neque nisi nulla"
-    },
-    {
         "id": 1,
         "userId": 1,
         "title": "foo1",
         "body": "shdkhjsdkj dhsk"
+    },
+    {
+        "id": 2,
+        "userId": 1,
+        "title": "qui est esse",
+        "body": "est rerum tempore vitae\nsequi sint nihil reprehenderit dolor beatae ea dolores neque\nfugiat blanditiis voluptate porro vel nihil molestiae ut reiciendis\nqui aperiam non debitis possimus qui neque nisi nulla"
     },
     ... 
 ]
@@ -196,7 +200,7 @@ The MS:
 
 ```
 REQUEST:
-PUT /posts/[id]
+PUT /posts/{id}
 Accept: aplication/json
 Content-type: aplication/json
 
@@ -257,7 +261,7 @@ The MS:
 
 ```
 REQUEST:
-DELETE /posts/[id]
+DELETE /posts/{id}
 Accept: aplication/json
 Content-type: aplication/json
 
@@ -282,5 +286,7 @@ Body:
 Step 1 - to build docker image run ``$ docker build ./ -t springbootapp``
 
 Step 2 - to run app and db: ``$ docker-compose up``.
+
+MS runs on port ``8080``.
 
 [Back to Table of Content](#table-of-content)
