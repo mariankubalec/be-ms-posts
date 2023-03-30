@@ -8,9 +8,17 @@ import com.testapp.bemsposts.models.Post;
 import com.testapp.bemsposts.models.PostDTO;
 import com.testapp.bemsposts.models.PostUpdateDTO;
 import com.testapp.bemsposts.services.PostService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+@Tag(name = "Posts Microservice", description = "Posts Microservice with external API support")
 @Controller
 @RequestMapping("/posts")
 public class PostController {
@@ -40,6 +49,18 @@ public class PostController {
   //  >>> FUNCTIONAL REQUIREMENT <<<
   //    - Pridanie príspevku - potrebné validovať userID pomocou externej API
 
+  @Operation(
+      summary = "Add a Post",
+      description = "Adds a Post object. The response is added Post object with id, title," +
+          " body and userId.",
+      tags = {})
+  @ApiResponses({
+      @ApiResponse(responseCode = "201", content = {@Content(schema = @Schema(
+          implementation = Post.class), mediaType = "application/json")}),
+      @ApiResponse(responseCode = "400", content = {@Content(schema = @Schema(
+          implementation = ErrorMessageDTO.class), mediaType = "application/json")}),
+      @ApiResponse(responseCode = "503", content = {@Content(schema = @Schema(
+          implementation = ErrorMessageDTO.class), mediaType = "application/json")})})
   @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
   public ResponseEntity<Post> addPost(@RequestBody PostDTO inputPost) {
@@ -51,6 +72,18 @@ public class PostController {
   //    - Zobrazenie príspevku na základe id
   //    - ak sa príspevok nenájde v systéme, je potrebné ho dohľadať pomocou externej API a uložiť
 
+  @Operation(
+      summary = "Retrieve a Post by Id",
+      description = "Gets a Post object by specifying its id. The response is Post object with" +
+          " id, title, body and userId.",
+      tags = {})
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(
+          implementation = Post.class), mediaType = "application/json")}),
+      @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(
+          implementation = ErrorMessageDTO.class), mediaType = "application/json")}),
+      @ApiResponse(responseCode = "503", content = {@Content(schema = @Schema(
+          implementation = ErrorMessageDTO.class), mediaType = "application/json")})})
   @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
   public ResponseEntity<Post> findPostById(@PathVariable(value = "id") Integer id) {
@@ -66,8 +99,30 @@ public class PostController {
   }
 
   //  >>> FUNCTIONAL REQUIREMENT <<<
-  //    - Zobrazenie príspevku na základe userId
+  //    - Zobrazenie príspevkov na základe userId
 
+  @Operation(
+      summary = "Retrieve a Posts by UserId",
+      description = "Gets a Post objects by specifying UserId as a request parameter. " +
+          "The response is the List of Post objects with id, title, body and userId.",
+      tags = {})
+  @ApiResponses({
+      @ApiResponse(
+          responseCode = "200",
+          content = {
+              @Content(
+                  array = @ArraySchema(schema = @Schema(implementation = Post.class)),
+                  mediaType = "application/json")
+          }
+      ),
+      @ApiResponse(
+          responseCode = "503",
+          content = {
+              @Content(schema = @Schema(implementation = ErrorMessageDTO.class),
+                  mediaType = "application/json")
+          }
+      )
+  })
   @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
   public ResponseEntity<List<Post>> findPostsByUserId(
@@ -78,7 +133,13 @@ public class PostController {
 
   //  >>> FUNCTIONAL REQUIREMENT <<<
   //    - Odstránenie príspevku
-
+  @Operation(
+      summary = "Delete a Post by Id", description = "Deletes a Post object by specifying its id.",
+      tags = {})
+  @ApiResponses({
+      @ApiResponse(responseCode = "200"),
+      @ApiResponse(responseCode = "503", content = {@Content(schema = @Schema(
+          implementation = ErrorMessageDTO.class), mediaType = "application/json")})})
   @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
   public ResponseEntity<Post> deletePostById(@PathVariable(value = "id") Integer id) {
@@ -88,7 +149,18 @@ public class PostController {
 
   //  >>> FUNCTIONAL REQUIREMENT <<<
   //    - Upravenie príspevku - možnosť meniť title a body
-
+  @Operation(
+      summary = "Update a Post by Id",
+      description = "Updates a Post object by specifying its id. The response is Post object with" +
+          " id, title, body and userId.",
+      tags = {})
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(
+          implementation = Post.class), mediaType = "application/json")}),
+      @ApiResponse(responseCode = "404", content = {@Content(schema = @Schema(
+          implementation = ErrorMessageDTO.class), mediaType = "application/json")}),
+      @ApiResponse(responseCode = "503", content = {@Content(schema = @Schema(
+          implementation = ErrorMessageDTO.class), mediaType = "application/json")})})
   @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
   public ResponseEntity<Post> putPostById(@PathVariable(value = "id") Integer id,

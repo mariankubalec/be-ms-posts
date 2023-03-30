@@ -25,6 +25,7 @@ The MS solves basic CRUD operations.
   * [List posts by userId](#list-posts-by-userid)
   * [Update post by Id](#update-post-by-id)
   * [Delete post by Id](#delete-post-by-id)
+* [Documentation](documentation)
 * [Docker](#docker) 
 
 ## Settings
@@ -69,12 +70,13 @@ Body:
     "userId": 1
 }
 
-RESPONSE: HTTP 200
+RESPONSE: HTTP 201
 Body:
 {
-    "title": "foo",
-    "body": "bar",
-    "userId": 1
+    "id": 101,
+    "userId": 1,
+    title": "foo",
+    "body": "bar"
 }
 ```
 
@@ -278,6 +280,13 @@ Body:
 }
 ```
 
+[Back to Table of Content](#table-of-content)
+
+## Documentation
+
+Swager interactive API documentation is located on the endpoint ``/documentation``.
+
+OpenAPI 3 is located on the endpoint ``/api-docs``.
 
 [Back to Table of Content](#table-of-content)
 
