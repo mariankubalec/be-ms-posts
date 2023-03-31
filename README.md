@@ -52,7 +52,10 @@ Whole url including DB name, for example: ``jdbc:postgresql://localhost:5432/be-
 ### Add post
 
 The MS:
-- checks, if userId exists on external API.
+- checks:
+  - if title and body are not both null
+  - if userId is positive number
+  - if userId exists on external API
 - adds post into external API
 - adds post into internal DB
 
@@ -78,6 +81,27 @@ Body:
     "userId": 1,
     title": "foo",
     "body": "bar"
+}
+```
+
+
+#### Bad case: title and body are null
+
+```
+RESPONSE: HTTP 400
+Body:
+{
+    "error": "Input Data Not Found"
+}
+```
+
+#### Bad case: userId is negative number
+
+```
+RESPONSE: HTTP 400
+Body:
+{
+    "error": "UserId must be positive number"
 }
 ```
 
