@@ -39,7 +39,7 @@ The MS solves basic CRUD operations.
 To run MS it is necessary to provide environment variables.
 
 - #### DB URL: ``SPRING_DATASOURCE_URL``
-Whole url including DB name, for example: ``jdbc:postgresql://localhost:5432/be-ms-tasks``
+Whole url including DB name, for example: ``jdbc:postgresql://localhost:5432/be-ms-posts``
 
 - #### DB user name: ``SPRING_DATASOURCE_USERNAME``
 
