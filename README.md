@@ -30,14 +30,15 @@ The MS solves basic CRUD operations.
 
 ## Settings
 
-### Environment variables
-
-- #### DB URL: ``SPRING_DATASOURCE_URL``
-
 ### Configurations
 
 - #### MS runs on port: ``8080``
 
+### Environment variables
+
+To run MS it is necessary to provide environment variables.
+
+- #### DB URL: ``SPRING_DATASOURCE_URL``
 Whole url including DB name, for example: ``jdbc:postgresql://localhost:5432/be-ms-tasks``
 
 - #### DB user name: ``SPRING_DATASOURCE_USERNAME``
@@ -291,6 +292,8 @@ OpenAPI 3 is located on the endpoint ``/api-docs``.
 [Back to Table of Content](#table-of-content)
 
 ## Docker
+
+To run MS on Docker platform:
 
 Step 1 - to build docker image run ``$ docker build ./ -t springbootapp``
 
