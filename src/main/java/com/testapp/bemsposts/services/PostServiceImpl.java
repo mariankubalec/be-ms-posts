@@ -1,5 +1,7 @@
 package com.testapp.bemsposts.services;
 
+import com.testapp.bemsposts.exceptions.NullInputException;
+import com.testapp.bemsposts.exceptions.UserNotFoundException;
 import com.testapp.bemsposts.models.Post;
 import com.testapp.bemsposts.models.PostDTO;
 import com.testapp.bemsposts.models.PostUpdateDTO;
@@ -32,10 +34,20 @@ public class PostServiceImpl implements PostService {
   // -----------------------------
   @Override
   public Post addPost(PostDTO inputPost) {
-    externalAPIService.validateUserId(inputPost.getUserId());
+    validateInput(inputPost);
     Post post = externalAPIService.savePost(inputPost);
     savePost(post);
     return post;
+  }
+
+  private void validateInput(PostDTO inputPost) {
+    if (inputPost.getTitle() == null && inputPost.getBody() == null) {
+      throw new NullInputException("Input Data Not Found");
+    }
+    if (inputPost.getUserId() < 1) {
+      throw new UserNotFoundException("UserId must be positive number");
+    }
+    externalAPIService.validateUserId(inputPost.getUserId());
   }
 
   private void savePost(Post post) {
@@ -68,6 +80,7 @@ public class PostServiceImpl implements PostService {
     List<Post> externalPosts = externalAPIService.findPostsByUserId(userId);
     return mergePosts(internalPosts, externalPosts);
   }
+
   private List<Post> mergePosts(List<Post> internalPosts, List<Post> externalPosts) {
     List<Integer> internalPostIds = new ArrayList<>();
     for (Post element : internalPosts) {

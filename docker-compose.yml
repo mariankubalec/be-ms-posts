@@ -11,7 +11,7 @@ services:
     environment:
       - POSTGRES_PASSWORD=Admin123
       - POSTGRES_USER=postgres
-      - POSTGRES_DB=be-ms-tasks
+      - POSTGRES_DB=be-ms-posts
     restart: unless-stopped
   # APP*****************************************
   springbootapp:
@@ -24,7 +24,7 @@ services:
       - 8080:8080
     environment:
       - APIURL=https://jsonplaceholder.typicode.com
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/be-ms-tasks
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/be-ms-posts
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=Admin123
     restart: unless-stopped

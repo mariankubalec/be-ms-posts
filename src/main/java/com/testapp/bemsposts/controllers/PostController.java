@@ -1,6 +1,7 @@
 package com.testapp.bemsposts.controllers;
 
 import com.testapp.bemsposts.exceptions.ExternalAPIErrorException;
+import com.testapp.bemsposts.exceptions.NullInputException;
 import com.testapp.bemsposts.exceptions.PostNotFoundException;
 import com.testapp.bemsposts.exceptions.UserNotFoundException;
 import com.testapp.bemsposts.models.ErrorMessageDTO;
@@ -18,7 +19,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -52,8 +52,7 @@ public class PostController {
   @Operation(
       summary = "Add a Post",
       description = "Adds a Post object. The response is added Post object with id, title," +
-          " body and userId.",
-      tags = {})
+          " body and userId.")
   @ApiResponses({
       @ApiResponse(responseCode = "201", content = {@Content(schema = @Schema(
           implementation = Post.class), mediaType = "application/json")}),
@@ -75,8 +74,7 @@ public class PostController {
   @Operation(
       summary = "Retrieve a Post by Id",
       description = "Gets a Post object by specifying its id. The response is Post object with" +
-          " id, title, body and userId.",
-      tags = {})
+          " id, title, body and userId.")
   @ApiResponses({
       @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(
           implementation = Post.class), mediaType = "application/json")}),
@@ -104,8 +102,7 @@ public class PostController {
   @Operation(
       summary = "Retrieve a Posts by UserId",
       description = "Gets a Post objects by specifying UserId as a request parameter. " +
-          "The response is the List of Post objects with id, title, body and userId.",
-      tags = {})
+          "The response is the List of Post objects with id, title, body and userId.")
   @ApiResponses({
       @ApiResponse(
           responseCode = "200",
@@ -126,7 +123,7 @@ public class PostController {
   @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
   public ResponseEntity<List<Post>> findPostsByUserId(
-      @RequestParam(value = "userId", required = true) Integer userId) {
+      @RequestParam(value = "userId") Integer userId) {
     List<Post> posts = postService.findPostsByUserId(userId);
     return ResponseEntity.status(HttpStatus.OK).body(posts);
   }
@@ -134,8 +131,7 @@ public class PostController {
   //  >>> FUNCTIONAL REQUIREMENT <<<
   //    - Odstránenie príspevku
   @Operation(
-      summary = "Delete a Post by Id", description = "Deletes a Post object by specifying its id.",
-      tags = {})
+      summary = "Delete a Post by Id", description = "Deletes a Post object by specifying its id.")
   @ApiResponses({
       @ApiResponse(responseCode = "200"),
       @ApiResponse(responseCode = "503", content = {@Content(schema = @Schema(
@@ -152,8 +148,7 @@ public class PostController {
   @Operation(
       summary = "Update a Post by Id",
       description = "Updates a Post object by specifying its id. The response is Post object with" +
-          " id, title, body and userId.",
-      tags = {})
+          " id, title, body and userId.")
   @ApiResponses({
       @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(
           implementation = Post.class), mediaType = "application/json")}),
@@ -170,20 +165,27 @@ public class PostController {
   }
 
   @ExceptionHandler(PostNotFoundException.class)
-  public ResponseEntity handlePostNotFoundException(PostNotFoundException exception) {
+  public ResponseEntity<ErrorMessageDTO> handlePostNotFoundException(PostNotFoundException exception) {
     return ResponseEntity.status(HttpStatus.NOT_FOUND)
         .body(new ErrorMessageDTO(exception.getMessage()));
   }
 
   @ExceptionHandler(UserNotFoundException.class)
-  public ResponseEntity handleUserNotFoundException(UserNotFoundException exception) {
+  public ResponseEntity<ErrorMessageDTO> handleUserNotFoundException(UserNotFoundException exception) {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
         .body(new ErrorMessageDTO(exception.getMessage()));
   }
 
   @ExceptionHandler(ExternalAPIErrorException.class)
-  public ResponseEntity handleExternalAPIErrorException(ExternalAPIErrorException exception) {
+  public ResponseEntity<ErrorMessageDTO> handleExternalAPIErrorException(ExternalAPIErrorException exception) {
     return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
         .body(new ErrorMessageDTO(exception.getMessage()));
   }
+
+  @ExceptionHandler(NullInputException.class)
+  public ResponseEntity<ErrorMessageDTO> handleNullInputException(NullInputException exception) {
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        .body(new ErrorMessageDTO(exception.getMessage()));
+  }
+
 }
